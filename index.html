@@ -23,7 +23,7 @@ body{
   background-attachment:fixed;
   min-height:100vh;overflow-x:hidden;
 }
-@media (pointer:fine){ body, button, label, a, .cat-card{cursor:var(--paw), auto} }
+@media (pointer:fine){ body, button, label, a, .cat-card, .coupon{cursor:var(--paw), auto} }
 body.locked{overflow:hidden}
 button{font-family:inherit}
 .script{font-family:'Pacifico',cursive;font-weight:400}
@@ -226,6 +226,57 @@ section{padding:90px 20px;scroll-margin-top:40px}
 .bg5{background:linear-gradient(160deg,#fff3e6,#ffe1ec)}
 .bg6{background:linear-gradient(160deg,#e8f4ff,#efe4ff)}
 
+/* ---------- love coupons ---------- */
+.coupon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.coupon{
+  position:relative;overflow:hidden;border-radius:22px;padding:30px 22px 26px;text-align:center;
+  background:linear-gradient(160deg,#fff 0%,#fff6fa 100%);
+  border:3px dashed var(--pink);outline:none;
+  transition:opacity .9s ease, transform .35s cubic-bezier(.3,1.6,.5,1), box-shadow .3s, border-color .3s;
+}
+.coupon:hover,.coupon:focus-visible{transform:translateY(-8px) rotate(-1.5deg);box-shadow:0 20px 44px rgba(125,26,56,.2);border-color:var(--rose)}
+.coupon:nth-child(even):hover,.coupon:nth-child(even):focus-visible{transform:translateY(-8px) rotate(1.5deg)}
+.c-emoji{display:block;font-size:46px;line-height:1;margin-bottom:12px;filter:drop-shadow(0 4px 6px rgba(125,26,56,.15));transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.coupon:hover .c-emoji{transform:scale(1.15) rotate(-6deg)}
+.coupon h5{font-size:1.22rem;color:var(--deep);margin-bottom:8px;line-height:1.25}
+.coupon p{font-size:.97rem;color:var(--soft);line-height:1.5}
+.c-foot{margin-top:16px;font-weight:700;font-size:.78rem;letter-spacing:1.5px;color:var(--rose);text-transform:uppercase}
+.stamp{
+  position:absolute;inset:0;display:grid;place-items:center;
+  background:rgba(255,248,241,.82);backdrop-filter:blur(2px);
+  font-family:'Pacifico',cursive;font-size:1.5rem;color:var(--rose);
+  opacity:0;transform:scale(1.5) rotate(-14deg);
+  transition:opacity .35s ease, transform .5s cubic-bezier(.3,1.6,.5,1);
+  pointer-events:none;
+}
+.coupon.redeemed .stamp{opacity:1;transform:scale(1) rotate(-14deg)}
+.coupon.redeemed{filter:saturate(.72)}
+
+/* ---------- jigsaw puzzle ---------- */
+.puzzle-card{text-align:center;padding:36px clamp(18px,5vw,44px);background:linear-gradient(160deg,#fff,#f7f2ff)}
+.upload-btn{display:inline-block;margin-bottom:24px}
+.puzzle-board{
+  width:min(360px,84vw);aspect-ratio:1;margin:0 auto 22px;
+  display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
+  gap:3px;padding:6px;background:#fff;border-radius:18px;
+  box-shadow:inset 0 0 0 3px var(--baby),0 10px 30px rgba(107,63,85,.12);
+}
+.puzzle-tile{
+  border-radius:8px;cursor:pointer;position:relative;
+  background-size:300% 300%;background-repeat:no-repeat;background-color:var(--baby);
+  outline:3px solid transparent;outline-offset:-3px;
+  transition:transform .2s, box-shadow .2s, outline-color .2s;
+}
+.puzzle-tile::after{content:"";position:absolute;inset:0;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.45)}
+.puzzle-tile.empty{cursor:default;background:repeating-linear-gradient(45deg,#fbe3ea 0 10px,#fff 10px 20px)}
+.puzzle-tile.empty:hover{transform:none}
+.puzzle-tile:hover{transform:scale(1.03)}
+.puzzle-tile.selected{outline-color:var(--rose);transform:scale(1.06);z-index:2;box-shadow:0 6px 16px rgba(194,65,107,.4)}
+.puzzle-tile.solved{animation:solvedPulse .6s ease}
+@keyframes solvedPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.puzzle-controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.puzzle-note{color:var(--soft);font-size:.98rem;min-height:1.6em}
+
 /* ---------- night ---------- */
 .night{position:relative;overflow:hidden;color:#fff;text-align:center;padding:110px 20px 70px;margin-top:40px;
   background:linear-gradient(180deg,rgba(255,225,236,0) 0%,#a3445f 12%,#5e1830 45%,#260812 100%)}
@@ -233,7 +284,6 @@ section{padding:90px 20px;scroll-margin-top:40px}
 .star{position:absolute;background:#fff;border-radius:50%;animation:tw 3s ease-in-out infinite}
 @keyframes tw{0%,100%{opacity:.25}50%{opacity:1;box-shadow:0 0 8px #fff}}
 .moon{position:absolute;top:110px;right:12%;width:90px;height:90px;border-radius:50%;background:#fff6d8;box-shadow:0 0 40px #fff3c4,0 0 90px rgba(255,243,196,.5);animation:bob 6s ease-in-out infinite}
-.moon-x::after{content:"";position:absolute;top:-8px;left:-18px;width:90px;height:90px;border-radius:50%;background:#7a63b8;opacity:0}
 .shoot{position:absolute;width:120px;height:2px;background:linear-gradient(90deg,#fff,transparent);top:20%;left:-150px;transform:rotate(-18deg);animation:shoot 9s linear infinite 3s;opacity:0}
 @keyframes shoot{0%{left:-150px;opacity:0}2%{opacity:1}10%{left:110%;top:42%;opacity:0}100%{left:110%;opacity:0}}
 .night-inner{position:relative;z-index:2;max-width:720px;margin:0 auto}
@@ -279,6 +329,8 @@ footer{text-align:center;padding:40px 20px 50px;color:#f0c3d0;font-size:.95rem;p
   <a href="#kit">🧸 <span>Survival Kit</span></a>
   <a href="#letter-sec">✉️ <span>Secret Letter</span></a>
   <a href="#cats">🐱 <span>Cat Therapy</span></a>
+  <a href="#coupons">🎟️ <span>Coupons</span></a>
+  <a href="#puzzle">🧩 <span>Puzzle</span></a>
   <a href="#night">🌙 <span>Goodnight</span></a>
 </nav>
 
@@ -390,6 +442,43 @@ footer{text-align:center;padding:40px 20px 50px;color:#f0c3d0;font-size:.95rem;p
     </div>
   </section>
 
+  <div class="divider">♡ ✿ ♡</div>
+
+  <!-- ============ LOVE COUPONS ============ -->
+  <section id="coupons">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="tag">redeemable anytime, forever</span>
+        <h3>Your Little Coupon Book 🎟️</h3>
+      </div>
+      <div class="coupon-grid" id="couponGrid"></div>
+      <p class="tip reveal">tap a coupon to redeem it ♡ (they never run out)</p>
+    </div>
+  </section>
+
+  <div class="divider">♡ ✿ ♡</div>
+
+  <!-- ============ JIGSAW PUZZLE ============ -->
+  <section id="puzzle">
+    <div class="wrap" style="max-width:760px">
+      <div class="sec-head reveal">
+        <span class="tag">a picture, piece by piece</span>
+        <h3>Our Little Puzzle 🧩</h3>
+      </div>
+      <div class="card puzzle-card reveal">
+        <label class="btn lav upload-btn">
+          CHOOSE A PICTURE 📷
+          <input type="file" id="puzzleInput" accept="image/*" hidden>
+        </label>
+        <div class="puzzle-board" id="puzzleBoard"></div>
+        <div class="puzzle-controls">
+          <button class="btn" id="shuffleBtn">SHUFFLE PIECES 🧩</button>
+        </div>
+        <p class="puzzle-note" id="puzzleNote">choose a picture above to begin ♡</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ NIGHT ============ -->
   <section id="night" class="night">
     <div class="stars" id="stars"></div>
@@ -431,7 +520,6 @@ const PRESETS = {
   peach:  {fur:'#ffd9cc', shade:'#fff1ec'},
   lav:    {fur:'#e7dcff', shade:'#f7f2ff'}
 };
-function mirror(d){ return d; }
 function catInner(o){
   o = o || {};
   const F=o.fur||'#fff', S=o.shade||'#fdeef3', E='#ffc2d4';
@@ -525,7 +613,7 @@ function curledCat(){
       <path d="M90 102 q-6 -30 18 -40 q22 -6 34 10" fill="#e9a9bb" stroke="${O}" stroke-width="3" stroke-linejoin="round"/>
       <circle cx="150" cy="74" r="8" fill="#fff" stroke="${O}" stroke-width="3"/>
     </g>
-    ${zzz(150,60).replace(/fill:var\(--lav2\)/,'')}
+    ${zzz(150,60)}
   </svg>`;
 }
 
@@ -777,6 +865,141 @@ wishBtn.addEventListener('click', ()=>{
   burst(x, y, 22, ['⭐','✨','🌟','💫','♡']);
   wishBtn.textContent = wishes[wi++ % wishes.length];
 });
+
+/* =========================================================
+   NEW: love coupons
+   ========================================================= */
+const coupons = [
+  { emoji:'🤗', title:'One Warm Hug', desc:'the kind that squeezes all the worry out of you. redeemable at any hour, no questions asked.' },
+  { emoji:'🎬', title:'One Movie Date', desc:'you pick the movie, i bring the snacks and exactly zero complaints. blanket fort optional.' },
+  { emoji:'💃', title:'One Dance Session', desc:'living room floor, terrible music, zero judgement. pure joy only.' },
+  { emoji:'💋', title:'One Forehead Kiss', desc:'delivered with maximum tenderness. forehead, cheeks, nose — your pick.' },
+  { emoji:'🍕', title:'One Meal Together', desc:'your favourite food and my favourite company. seconds always allowed.' },
+  { emoji:'🐾', title:'One Unlimited Cuddle Pass', desc:'no expiry. no limits. kittens may join. valid forever and ever and ever.' }
+];
+const couponGrid = document.getElementById('couponGrid');
+couponGrid.innerHTML = coupons.map((c,i)=>`
+  <div class="coupon reveal" tabindex="0" role="button" aria-label="${c.title}" style="transition-delay:${(i%3)*80}ms">
+    <span class="c-emoji">${c.emoji}</span>
+    <h5>${c.title}</h5>
+    <p>${c.desc}</p>
+    <div class="c-foot">✦ valid forever ✦</div>
+    <span class="stamp">redeemed ♡</span>
+  </div>`).join('');
+couponGrid.querySelectorAll('.coupon').forEach(card=>{
+  io.observe(card);
+  const redeem = ()=>{
+    card.classList.toggle('redeemed');
+    if(card.classList.contains('redeemed')){
+      const [x,y] = centerOf(card);
+      burst(x, y, 12, ['💗','🎀','✨','💖','♡']);
+    }
+  };
+  card.addEventListener('click', redeem);
+  card.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); redeem(); } });
+});
+
+/* =========================================================
+   NEW: jigsaw puzzle (upload your own picture)
+   ========================================================= */
+const P_SIZE = 3;
+const P_TOTAL = P_SIZE * P_SIZE;
+let puzzlePieces = Array.from({length:P_TOTAL}, (_,i)=>i);
+let puzzleImg = pic.jpeg;
+let puzzleSelected = null;
+let puzzleSolved = false;
+const puzzleBoard = document.getElementById('puzzleBoard');
+const puzzleNote = document.getElementById('puzzleNote');
+
+function isPuzzleSolved(){ return puzzlePieces.every((p,i)=>p===i); }
+
+function renderPuzzle(){
+  puzzleBoard.innerHTML = '';
+  puzzlePieces.forEach((piece, slot)=>{
+    const tile = document.createElement('div');
+    tile.className = 'puzzle-tile';
+    if(puzzleImg){
+      const col = piece % P_SIZE;
+      const row = Math.floor(piece / P_SIZE);
+      tile.style.backgroundImage = `url("${puzzleImg}")`;
+      tile.style.backgroundPosition = `${col*50}% ${row*50}%`;
+    } else {
+      tile.classList.add('empty');
+    }
+    if(puzzleSelected === slot) tile.classList.add('selected');
+    tile.addEventListener('click', ()=>onTileClick(slot));
+    puzzleBoard.appendChild(tile);
+  });
+}
+
+function onTileClick(slot){
+  if(!puzzleImg || puzzleSolved) return;
+  if(puzzleSelected === null){ puzzleSelected = slot; renderPuzzle(); return; }
+  if(puzzleSelected === slot){ puzzleSelected = null; renderPuzzle(); return; }
+  const a = puzzleSelected;
+  [puzzlePieces[a], puzzlePieces[slot]] = [puzzlePieces[slot], puzzlePieces[a]];
+  puzzleSelected = null;
+  // Show your baked-in photo, already shuffled
+if(puzzleImg){ shufflePuzzle(); } else { renderPuzzle(); }
+  if(isPuzzleSolved()){
+    puzzleSolved = true;
+    const [x,y] = centerOf(puzzleBoard);
+    burst(x, y, 34, ['🧩','💗','✨','🎉','💖','🎀']);
+    confetti(70);
+    puzzleNote.textContent = 'YOU SOLVED IT!! look at us — putting all the pieces together ♡';
+    [...puzzleBoard.children].forEach((t,i)=>setTimeout(()=>t.classList.add('solved'), i*70));
+  }
+}
+
+function shufflePuzzle(){
+  if(!puzzleImg) return;
+  do {
+    for(let i=puzzlePieces.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [puzzlePieces[i],puzzlePieces[j]] = [puzzlePieces[j],puzzlePieces[i]];
+    }
+  } while(isPuzzleSolved());
+  puzzleSelected = null;
+  puzzleSolved = false;
+  renderPuzzle();
+  puzzleNote.textContent = 'tap two pieces to swap them ♡ solve it for a little surprise';
+}
+
+document.getElementById('shuffleBtn').addEventListener('click', shufflePuzzle);
+
+document.getElementById('puzzleInput').addEventListener('change', e=>{
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    makeSquareImage(ev.target.result).then(sq=>{
+      puzzleImg = sq;
+      shufflePuzzle();
+    });
+  };
+  reader.readAsDataURL(file);
+});
+
+function makeSquareImage(src){
+  return new Promise(resolve=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const s = Math.min(img.width, img.height);
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = 600;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0,0,600,600);
+      ctx.drawImage(img, (img.width-s)/2, (img.height-s)/2, s, s, 0, 0, 600, 600);
+      resolve(canvas.toDataURL('image/jpeg', .9));
+    };
+    img.onerror = ()=>resolve(src);
+    img.src = src;
+  });
+}
+
+renderPuzzle();
+
 })();
 </script>
 </body>
