@@ -254,7 +254,6 @@ section{padding:90px 20px;scroll-margin-top:40px}
 
 /* ---------- jigsaw puzzle ---------- */
 .puzzle-card{text-align:center;padding:36px clamp(18px,5vw,44px);background:linear-gradient(160deg,#fff,#f7f2ff)}
-.upload-btn{display:inline-block;margin-bottom:24px}
 .puzzle-board{
   width:min(360px,84vw);aspect-ratio:1;margin:0 auto 22px;
   display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
@@ -466,15 +465,11 @@ footer{text-align:center;padding:40px 20px 50px;color:#f0c3d0;font-size:.95rem;p
         <h3>Our Little Puzzle 🧩</h3>
       </div>
       <div class="card puzzle-card reveal">
-        <label class="btn lav upload-btn">
-          CHOOSE A PICTURE 📷
-          <input type="file" id="puzzleInput" accept="image/*" hidden>
-        </label>
         <div class="puzzle-board" id="puzzleBoard"></div>
         <div class="puzzle-controls">
           <button class="btn" id="shuffleBtn">SHUFFLE PIECES 🧩</button>
         </div>
-        <p class="puzzle-note" id="puzzleNote">choose a picture above to begin ♡</p>
+        <p class="puzzle-note" id="puzzleNote">tap two pieces to swap them ♡</p>
       </div>
     </div>
   </section>
@@ -867,15 +862,14 @@ wishBtn.addEventListener('click', ()=>{
 });
 
 /* =========================================================
-   NEW: love coupons
+   LOVE COUPONS (Exactly 5)
    ========================================================= */
 const coupons = [
   { emoji:'🤗', title:'One Warm Hug', desc:'the kind that squeezes all the worry out of you. redeemable at any hour, no questions asked.' },
   { emoji:'🎬', title:'One Movie Date', desc:'you pick the movie, i bring the snacks and exactly zero complaints. blanket fort optional.' },
   { emoji:'💃', title:'One Dance Session', desc:'living room floor, terrible music, zero judgement. pure joy only.' },
   { emoji:'💋', title:'One Forehead Kiss', desc:'delivered with maximum tenderness. forehead, cheeks, nose — your pick.' },
-  { emoji:'🍕', title:'One Meal Together', desc:'your favourite food and my favourite company. seconds always allowed.' },
-  { emoji:'🐾', title:'One Unlimited Cuddle Pass', desc:'no expiry. no limits. kittens may join. valid forever and ever and ever.' }
+  { emoji:'🍕', title:'One Meal Together', desc:'your favourite food and my favourite company. seconds always allowed.' }
 ];
 const couponGrid = document.getElementById('couponGrid');
 couponGrid.innerHTML = coupons.map((c,i)=>`
@@ -900,12 +894,12 @@ couponGrid.querySelectorAll('.coupon').forEach(card=>{
 });
 
 /* =========================================================
-   NEW: jigsaw puzzle (upload your own picture)
+   JIGSAW PUZZLE (Hardcoded to pic.jpeg)
    ========================================================= */
 const P_SIZE = 3;
 const P_TOTAL = P_SIZE * P_SIZE;
 let puzzlePieces = Array.from({length:P_TOTAL}, (_,i)=>i);
-let puzzleImg = 'pic.jpeg';
+let puzzleImg = 'pic.jpeg'; // YOUR IMAGE IS SET HERE
 let puzzleSelected = null;
 let puzzleSolved = false;
 const puzzleBoard = document.getElementById('puzzleBoard');
@@ -939,14 +933,13 @@ function onTileClick(slot){
   const a = puzzleSelected;
   [puzzlePieces[a], puzzlePieces[slot]] = [puzzlePieces[slot], puzzlePieces[a]];
   puzzleSelected = null;
-  // Show your baked-in photo, already shuffled
-if(puzzleImg){ shufflePuzzle(); } else { renderPuzzle(); }
+  renderPuzzle();
   if(isPuzzleSolved()){
     puzzleSolved = true;
     const [x,y] = centerOf(puzzleBoard);
     burst(x, y, 34, ['🧩','💗','✨','🎉','💖','🎀']);
     confetti(70);
-    puzzleNote.textContent = 'YOU SOLVED IT!! look at us — putting all the pieces together ♡';
+    puzzleNote.textContent = 'Just like you are the piece of my life, and it is incomplete without you... ♡';
     [...puzzleBoard.children].forEach((t,i)=>setTimeout(()=>t.classList.add('solved'), i*70));
   }
 }
@@ -962,43 +955,13 @@ function shufflePuzzle(){
   puzzleSelected = null;
   puzzleSolved = false;
   renderPuzzle();
-  puzzleNote.textContent = 'tap two pieces to swap them ♡ solve it for a little surprise';
+  puzzleNote.textContent = 'tap two pieces to swap them ♡';
 }
 
 document.getElementById('shuffleBtn').addEventListener('click', shufflePuzzle);
 
-document.getElementById('puzzleInput').addEventListener('change', e=>{
-  const file = e.target.files && e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev=>{
-    makeSquareImage(ev.target.result).then(sq=>{
-      puzzleImg = sq;
-      shufflePuzzle();
-    });
-  };
-  reader.readAsDataURL(file);
-});
-
-function makeSquareImage(src){
-  return new Promise(resolve=>{
-    const img = new Image();
-    img.onload = ()=>{
-      const s = Math.min(img.width, img.height);
-      const canvas = document.createElement('canvas');
-      canvas.width = canvas.height = 600;
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(0,0,600,600);
-      ctx.drawImage(img, (img.width-s)/2, (img.height-s)/2, s, s, 0, 0, 600, 600);
-      resolve(canvas.toDataURL('image/jpeg', .9));
-    };
-    img.onerror = ()=>resolve(src);
-    img.src = src;
-  });
-}
-
-renderPuzzle();
+// Auto-load and shuffle the picture on page load
+if(puzzleImg){ shufflePuzzle(); } else { renderPuzzle(); }
 
 })();
 </script>
