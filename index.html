@@ -256,20 +256,11 @@ section{padding:90px 20px;scroll-margin-top:40px}
 .puzzle-card{text-align:center;padding:36px clamp(18px,5vw,44px);background:linear-gradient(160deg,#fff,#f7f2ff)}
 .puzzle-board{
   width:min(360px,84vw);aspect-ratio:1;margin:0 auto 22px;
-  display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
-  gap:2px;padding:20px;background:#fff;border-radius:18px;
+  background:#fff;border-radius:18px;
   box-shadow:inset 0 0 0 3px var(--baby),0 10px 30px rgba(107,63,85,.12);
+  overflow:hidden;position:relative;
 }
-.puzzle-tile{
-  position:relative;cursor:pointer;
-  background-size:300% 300%;background-repeat:no-repeat;background-color:var(--baby);
-  transition:transform .2s, filter .2s;
-  filter: drop-shadow(0 4px 8px rgba(125,26,56,.35));
-}
-.puzzle-tile:hover{transform:scale(1.08); z-index:2;}
-.puzzle-tile.selected{transform:scale(1.15); z-index:10; filter: drop-shadow(0 0 12px var(--rose));}
-.puzzle-tile.solved{animation:solvedPulse .6s ease}
-@keyframes solvedPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+#puzzleCanvas { width:100%; height:100%; display:block; cursor:pointer; }
 .puzzle-controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
 .puzzle-note{color:var(--soft);font-size:.98rem;min-height:1.6em; font-weight:500;}
 
@@ -462,23 +453,9 @@ footer{text-align:center;padding:40px 20px 50px;color:#f0c3d0;font-size:.95rem;p
         <h3>Our Little Puzzle 🧩</h3>
       </div>
       <div class="card puzzle-card reveal">
-        
-        <!-- This hidden SVG holds the perfect jigsaw piece shapes -->
-        <svg width="0" height="0" style="position:absolute;">
-          <defs>
-            <clipPath id="p0"><path d="M 0,0 L 100,0 L 100,20 C 120,20 120,80 100,80 L 100,100 L 80,100 C 80,120 20,120 20,100 L 0,100 Z"/></clipPath>
-            <clipPath id="p1"><path d="M 100,0 L 200,0 L 200,20 C 220,20 220,80 200,80 L 200,100 L 180,100 C 180,120 120,120 120,100 L 100,100 L 100,80 C 80,80 80,20 100,20 Z"/></clipPath>
-            <clipPath id="p2"><path d="M 200,0 L 300,0 L 300,100 L 280,100 C 280,120 220,120 220,100 L 200,100 L 200,80 C 180,80 180,20 200,20 Z"/></clipPath>
-            <clipPath id="p3"><path d="M 0,100 L 20,100 C 20,80 80,80 80,100 L 100,100 L 100,120 C 120,120 120,180 100,180 L 100,200 L 80,200 C 80,220 20,220 20,200 L 0,200 Z"/></clipPath>
-            <clipPath id="p4"><path d="M 100,100 L 120,100 C 120,80 180,80 180,100 L 200,100 L 200,120 C 220,120 220,180 200,180 L 200,200 L 180,200 C 180,220 120,220 120,200 L 100,200 L 100,180 C 80,180 80,120 100,120 Z"/></clipPath>
-            <clipPath id="p5"><path d="M 200,100 L 220,100 C 220,80 280,80 280,100 L 300,100 L 300,200 L 280,200 C 280,220 220,220 220,200 L 200,200 L 200,180 C 180,180 180,120 200,120 Z"/></clipPath>
-            <clipPath id="p6"><path d="M 0,200 L 20,200 C 20,180 80,180 80,200 L 100,200 L 100,220 C 120,220 120,280 100,280 L 100,300 L 0,300 Z"/></clipPath>
-            <clipPath id="p7"><path d="M 100,200 L 120,200 C 120,180 180,180 180,200 L 200,200 L 200,220 C 220,220 220,280 200,280 L 200,300 L 100,300 L 100,280 C 80,280 80,220 100,220 Z"/></clipPath>
-            <clipPath id="p8"><path d="M 200,200 L 220,200 C 220,180 280,180 280,200 L 300,200 L 300,300 L 200,300 L 200,280 C 180,280 180,220 200,220 Z"/></clipPath>
-          </defs>
-        </svg>
-
-        <div class="puzzle-board" id="puzzleBoard"></div>
+        <div class="puzzle-board" id="puzzleBoard">
+          <canvas id="puzzleCanvas" width="600" height="600"></canvas>
+        </div>
         <div class="puzzle-controls">
           <button class="btn" id="shuffleBtn">SHUFFLE PIECES 🧩</button>
         </div>
@@ -875,7 +852,7 @@ wishBtn.addEventListener('click', ()=>{
 });
 
 /* =========================================================
-   LOVE COUPONS
+   LOVE COUPONS (Exactly 6)
    ========================================================= */
 const coupons = [
   { emoji:'🤗', title:'One Warm Hug', desc:'the kind that squeezes all the worry out of you. redeemable at any hour, no questions asked.' },
@@ -908,78 +885,173 @@ couponGrid.querySelectorAll('.coupon').forEach(card=>{
 });
 
 /* =========================================================
-   JIGSAW PUZZLE (Perfect SVG clip-path)
+   JIGSAW PUZZLE (Bulletproof Canvas Method)
    ========================================================= */
-const P_SIZE = 3;
-const P_TOTAL = P_SIZE * P_SIZE;
-let puzzlePieces = Array.from({length:P_TOTAL}, (_,i)=>i);
-let puzzleImg = 'pic.jpeg'; // YOUR IMAGE IS SET HERE
-let puzzleSelected = null;
-let puzzleSolved = false;
-const puzzleBoard = document.getElementById('puzzleBoard');
-const puzzleNote = document.getElementById('puzzleNote');
+const canvas = document.getElementById('puzzleCanvas');
+const ctx = canvas.getContext('2d');
+let img = new Image();
+img.src = 'pic.jpeg'; // YOUR IMAGE IS SET HERE
 
-function isPuzzleSolved(){ return puzzlePieces.every((p,i)=>p===i); }
+const SIZE = 600;
+let pieces = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+let selected = null;
+let solved = false;
+let imgLoaded = false;
 
-function renderPuzzle(){
-  puzzleBoard.innerHTML = '';
-  puzzlePieces.forEach((piece, slot)=>{
-    const tile = document.createElement('div');
-    tile.className = 'puzzle-tile';
-    
-    // Apply the perfect SVG shape!
-    tile.style.clipPath = `url(#p${piece})`;
-    
-    if(puzzleImg){
-      const col = piece % P_SIZE;
-      const row = Math.floor(piece / P_SIZE);
-      tile.style.backgroundImage = `url("${puzzleImg}")`;
-      tile.style.backgroundPosition = `${col*50}% ${row*50}%`;
+const paths = [];
+const pieceDefs = [
+  [0, 2, 2, 0], [0, 2, 2, 1], [0, 0, 2, 1],
+  [1, 2, 2, 0], [1, 2, 2, 1], [1, 0, 2, 1],
+  [1, 2, 0, 0], [1, 2, 0, 1], [1, 0, 0, 1]
+];
+
+pieceDefs.forEach((def) => {
+  const [top, right, bottom, left] = def;
+  let p = new Path2D();
+  p.moveTo(0, 0);
+  // Top
+  if (top === 0) p.lineTo(200, 0);
+  else if (top === 1) { p.lineTo(80, 0); p.bezierCurveTo(80, 20, 120, 20, 120, 0); p.lineTo(200, 0); }
+  else if (top === 2) { p.lineTo(80, 0); p.bezierCurveTo(80, -20, 120, -20, 120, 0); p.lineTo(200, 0); }
+  // Right
+  if (right === 0) p.lineTo(200, 200);
+  else if (right === 1) { p.lineTo(200, 80); p.bezierCurveTo(180, 80, 180, 120, 200, 120); p.lineTo(200, 200); }
+  else if (right === 2) { p.lineTo(200, 80); p.bezierCurveTo(220, 80, 220, 120, 200, 120); p.lineTo(200, 200); }
+  // Bottom
+  if (bottom === 0) p.lineTo(0, 200);
+  else if (bottom === 1) { p.lineTo(120, 200); p.bezierCurveTo(120, 180, 80, 180, 80, 200); p.lineTo(0, 200); }
+  else if (bottom === 2) { p.lineTo(120, 200); p.bezierCurveTo(120, 220, 80, 220, 80, 200); p.lineTo(0, 200); }
+  // Left
+  if (left === 0) p.lineTo(0, 0);
+  else if (left === 1) { p.lineTo(0, 120); p.bezierCurveTo(20, 120, 20, 80, 0, 80); p.lineTo(0, 0); }
+  else if (left === 2) { p.lineTo(0, 120); p.bezierCurveTo(-20, 120, -20, 80, 0, 80); p.lineTo(0, 0); }
+  p.closePath();
+  paths.push(p);
+});
+
+function draw() {
+  ctx.clearRect(0, 0, SIZE, SIZE);
+  ctx.fillStyle = '#fdf5f7'; 
+  ctx.fillRect(0, 0, SIZE, SIZE);
+
+  pieces.forEach((pieceIndex, slotIndex) => {
+    const col = slotIndex % 3;
+    const row = Math.floor(slotIndex / 3);
+    const pieceCol = pieceIndex % 3;
+    const pieceRow = Math.floor(pieceIndex / 3);
+
+    // Draw beautiful drop shadow
+    ctx.save();
+    ctx.translate(col * 200, row * 200);
+    ctx.shadowColor = 'rgba(125,26,56,0.4)';
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 4;
+    ctx.fillStyle = '#fff';
+    ctx.fill(paths[pieceIndex]);
+    ctx.restore();
+
+    // Draw the image clipped to the jigsaw shape
+    ctx.save();
+    ctx.translate(col * 200, row * 200);
+    ctx.clip(paths[pieceIndex]);
+    if (imgLoaded && img.complete) {
+      ctx.drawImage(img, -pieceCol * 200, -pieceRow * 200, SIZE, SIZE);
+    } else {
+      ctx.fillStyle = '#ffe1ec';
+      ctx.fillRect(-20, -20, 240, 240);
     }
-    
-    if(puzzleSelected === slot) tile.classList.add('selected');
-    tile.addEventListener('click', ()=>onTileClick(slot));
-    puzzleBoard.appendChild(tile);
+    // Subtle white outline for 3D effect
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+    ctx.stroke(paths[pieceIndex]);
+    ctx.restore();
   });
-}
 
-function onTileClick(slot){
-  if(!puzzleImg || puzzleSolved) return;
-  if(puzzleSelected === null){ puzzleSelected = slot; renderPuzzle(); return; }
-  if(puzzleSelected === slot){ puzzleSelected = null; renderPuzzle(); return; }
-  const a = puzzleSelected;
-  [puzzlePieces[a], puzzlePieces[slot]] = [puzzlePieces[slot], puzzlePieces[a]];
-  puzzleSelected = null;
-  renderPuzzle();
-  
-  if(isPuzzleSolved()){
-    puzzleSolved = true;
-    const [x,y] = centerOf(puzzleBoard);
-    burst(x, y, 34, ['🧩','💗','✨','🎉','💖','🎀']);
-    confetti(70);
-    puzzleNote.textContent = 'Just like you are the piece of my life, and it is incomplete without you... ♡';
-    [...puzzleBoard.children].forEach((t,i)=>setTimeout(()=>t.classList.add('solved'), i*70));
+  // Highlight the selected piece
+  if (selected !== null && !solved) {
+    const col = selected % 3;
+    const row = Math.floor(selected / 3);
+    const pieceIndex = pieces[selected];
+    ctx.save();
+    ctx.translate(col * 200, row * 200);
+    ctx.clip(paths[pieceIndex]);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.fillRect(-20, -20, 240, 240);
+    ctx.restore();
   }
 }
 
-function shufflePuzzle(){
-  if(!puzzleImg) return;
-  do {
-    for(let i=puzzlePieces.length-1;i>0;i--){
-      const j = Math.floor(Math.random()*(i+1));
-      [puzzlePieces[i],puzzlePieces[j]] = [puzzlePieces[j],puzzlePieces[i]];
+canvas.addEventListener('click', (e) => {
+  if (!imgLoaded || solved) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width * SIZE;
+  const y = (e.clientY - rect.top) / rect.height * SIZE;
+
+  const col = Math.floor(x / 200);
+  const row = Math.floor(y / 200);
+  const slot = row * 3 + col;
+
+  if (selected === null) {
+    selected = slot;
+  } else if (selected === slot) {
+    selected = null;
+  } else {
+    const temp = pieces[selected];
+    pieces[selected] = pieces[slot];
+    pieces[slot] = temp;
+    selected = null;
+    
+    if (pieces.every((p, i) => p === i)) {
+      solved = true;
+      document.getElementById('puzzleNote').textContent = 'Just like you are the piece of my life, and it is incomplete without you... ♡';
+      const [bx, by] = centerOf(document.getElementById('puzzleBoard'));
+      burst(bx, by, 34, ['🧩','💗','✨','🎉','💖','🎀']);
+      confetti(70);
     }
-  } while(isPuzzleSolved());
-  puzzleSelected = null;
-  puzzleSolved = false;
-  renderPuzzle();
-  puzzleNote.textContent = 'tap two pieces to swap them ♡';
+  }
+  draw();
+});
+
+function shufflePuzzle() {
+  do {
+    for(let i=pieces.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [pieces[i],pieces[j]] = [pieces[j],pieces[i]];
+    }
+  } while(pieces.every((p, i) => p === i));
+  
+  selected = null;
+  solved = false;
+  draw();
+  document.getElementById('puzzleNote').textContent = 'tap two pieces to swap them ♡';
 }
 
 document.getElementById('shuffleBtn').addEventListener('click', shufflePuzzle);
 
-// Force the puzzle to load SCRAMBLED so she has to solve it
-if(puzzleImg){ shufflePuzzle(); } else { renderPuzzle(); }
+img.onload = () => {
+  if (imgLoaded) {
+    shufflePuzzle();
+    return;
+  }
+  imgLoaded = true;
+  
+  // Crop the image into a perfect square so it doesn't look squished
+  const s = Math.min(img.width, img.height);
+  const sx = (img.width - s) / 2;
+  const sy = (img.height - s) / 2;
+  
+  const offCanvas = document.createElement('canvas');
+  offCanvas.width = SIZE;
+  offCanvas.height = SIZE;
+  const offCtx = offCanvas.getContext('2d');
+  offCtx.drawImage(img, sx, sy, s, s, 0, 0, SIZE, SIZE);
+  
+  img.src = offCanvas.toDataURL();
+};
+
+draw(); // Initial empty draw
 
 })();
 </script>
