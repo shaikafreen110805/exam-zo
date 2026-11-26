@@ -264,28 +264,10 @@ section{padding:90px 20px;scroll-margin-top:40px}
   position:relative;cursor:pointer;
   background-size:300% 300%;background-repeat:no-repeat;background-color:var(--baby);
   transition:transform .2s, filter .2s;
-  filter: drop-shadow(0 2px 4px rgba(125,26,56,.3));
-  /* The magic CSS that makes it look like a real jigsaw puzzle */
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Cpath d='M0,0 L100,0 L100,20 C120,20 120,80 100,80 L100,100 L80,100 C80,120 20,120 20,100 L0,100 Z' fill='%23fff'/%3E%3Cpath d='M0,0 L100,0 L100,20 C120,20 120,80 100,80 L100,100 L80,100 C80,120 20,120 20,100 L0,100 L0,80 C-20,80 -20,20 0,20 Z' fill='%23fff' transform='translate(100, 0)'/%3E%3Cpath d='M0,0 L100,0 L100,100 L80,100 C80,120 20,120 20,100 L0,100 L0,80 C-20,80 -20,20 0,20 Z' fill='%23fff' transform='translate(200, 0)'/%3E%3Cpath d='M0,0 L20,0 C20,-20 80,-20 80,0 L100,0 L100,20 C120,20 120,80 100,80 L100,100 L80,100 C80,120 20,120 20,100 L0,100 Z' fill='%23fff' transform='translate(0, 100)'/%3E%3Cpath d='M0,0 L20,0 C20,-20 80,-20 80,0 L100,0 L100,20 C120,20 120,80 100,80 L100,100 L80,100 C80,120 20,120 20,100 L0,100 L0,80 C-20,80 -20,20 0,20 Z' fill='%23fff' transform='translate(100, 100)'/%3E%3Cpath d='M0,0 L20,0 C20,-20 80,-20 80,0 L100,0 L100,100 L80,100 C80,120 20,120 20,100 L0,100 L0,80 C-20,80 -20,20 0,20 Z' fill='%23fff' transform='translate(200, 100)'/%3E%3Cpath d='M0,0 L20,0 C20,-20 80,-20 80,0 L100,0 L100,20 C120,20 120,80 100,80 L100,100 L0,100 Z' fill='%23fff' transform='translate(0, 200)'/%3E%3Cpath d='M0,0 L20,0 C20,-20 80,-20 80,0 L100,0 L100,20 C120,20 120,80 100,80 L100,100 L0,100 L0,80 C-20,80 -20,20 0,20 Z' fill='%23fff' transform='translate(100, 200)'/%3E%3Cpath d='M0,0 L20,0 C20,-20 80,-20 80,0 L100,0 L100,100 L0,100 L0,80 C-20,80 -20,20 0,20 Z' fill='%23fff' transform='translate(200, 200)'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Cpath d='M0,0 L100,0 L100,20 C120,20 120,80 100,80 L100,100 L80,100 C80,120 20,120 20,100 L0,100 Z' fill='%23fff'/%3E%3Cpath d='M0,0 L100,0 L100,20 C120,20 120,80 100,80 L100,100 L80,100 C80,120 20,120 20,100 L0,100 L0,80 C-20,80 -20,20 0,20 Z' fill='%23fff' transform='translate(100, 0)'/%3E%3Cpath d='M0,0 L100,0 L100,100 L80,100 C80,120 20,120 20,100 L0,100 L0,80 C-20,80 -20,20 0,20 Z' fill='%23fff' transform='translate(200, 0)'/%3E%3Cpath d='M0,0 L20,0 C20,-20 80,-20 80,0 L100,0 L100,20 C120,20 120,80 100,80 L100,100 L80,100 C80,120 20,120 20,100 L0,100 Z' fill='%23fff' transform='translate(0, 100)'/%3E%3Cpath d='M0,0 L20,0 C20,-20 80,-20 80,0 L100,0 L100,20 C120,20 120,80 100,80 L100,100 L80,100 C80,120 20,120 20,100 L0,100 L0,80 C-20,80 -20,20 0,20 Z' fill='%23fff' transform='translate(100, 100)'/%3E%3Cpath d='M0,0 L20,0 C20,-20 80,-20 80,0 L100,0 L100,100 L80,100 C80,120 20,120 20,100 L0,100 L0,80 C-20,80 -20,20 0,20 Z' fill='%23fff' transform='translate(200, 100)'/%3E%3Cpath d='M0,0 L20,0 C20,-20 80,-20 80,0 L100,0 L100,20 C120,20 120,80 100,80 L100,100 L0,100 Z' fill='%23fff' transform='translate(0, 200)'/%3E%3Cpath d='M0,0 L20,0 C20,-20 80,-20 80,0 L100,0 L100,20 C120,20 120,80 100,80 L100,100 L0,100 L0,80 C-20,80 -20,20 0,20 Z' fill='%23fff' transform='translate(100, 200)'/%3E%3Cpath d='M0,0 L20,0 C20,-20 80,-20 80,0 L100,0 L100,100 L0,100 L0,80 C-20,80 -20,20 0,20 Z' fill='%23fff' transform='translate(200, 200)'/%3E%3C/svg%3E");
-  -webkit-mask-size: 300% 300%;
-  mask-size: 300% 300%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
+  filter: drop-shadow(0 4px 8px rgba(125,26,56,.35));
 }
-/* Precise mask positioning to create the interlocking pieces */
-.puzzle-tile[data-piece="0"] { -webkit-mask-position: 0% 0%; mask-position: 0% 0%; }
-.puzzle-tile[data-piece="1"] { -webkit-mask-position: 50% 0%; mask-position: 50% 0%; }
-.puzzle-tile[data-piece="2"] { -webkit-mask-position: 100% 0%; mask-position: 100% 0%; }
-.puzzle-tile[data-piece="3"] { -webkit-mask-position: 0% 50%; mask-position: 0% 50%; }
-.puzzle-tile[data-piece="4"] { -webkit-mask-position: 50% 50%; mask-position: 50% 50%; }
-.puzzle-tile[data-piece="5"] { -webkit-mask-position: 100% 50%; mask-position: 100% 50%; }
-.puzzle-tile[data-piece="6"] { -webkit-mask-position: 0% 100%; mask-position: 0% 100%; }
-.puzzle-tile[data-piece="7"] { -webkit-mask-position: 50% 100%; mask-position: 50% 100%; }
-.puzzle-tile[data-piece="8"] { -webkit-mask-position: 100% 100%; mask-position: 100% 100%; }
-
 .puzzle-tile:hover{transform:scale(1.08); z-index:2;}
-.puzzle-tile.selected{transform:scale(1.15); z-index:10; filter: drop-shadow(0 0 10px var(--rose));}
+.puzzle-tile.selected{transform:scale(1.15); z-index:10; filter: drop-shadow(0 0 12px var(--rose));}
 .puzzle-tile.solved{animation:solvedPulse .6s ease}
 @keyframes solvedPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 .puzzle-controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
@@ -480,6 +462,22 @@ footer{text-align:center;padding:40px 20px 50px;color:#f0c3d0;font-size:.95rem;p
         <h3>Our Little Puzzle 🧩</h3>
       </div>
       <div class="card puzzle-card reveal">
+        
+        <!-- This hidden SVG holds the perfect jigsaw piece shapes -->
+        <svg width="0" height="0" style="position:absolute;">
+          <defs>
+            <clipPath id="p0"><path d="M 0,0 L 100,0 L 100,20 C 120,20 120,80 100,80 L 100,100 L 80,100 C 80,120 20,120 20,100 L 0,100 Z"/></clipPath>
+            <clipPath id="p1"><path d="M 100,0 L 200,0 L 200,20 C 220,20 220,80 200,80 L 200,100 L 180,100 C 180,120 120,120 120,100 L 100,100 L 100,80 C 80,80 80,20 100,20 Z"/></clipPath>
+            <clipPath id="p2"><path d="M 200,0 L 300,0 L 300,100 L 280,100 C 280,120 220,120 220,100 L 200,100 L 200,80 C 180,80 180,20 200,20 Z"/></clipPath>
+            <clipPath id="p3"><path d="M 0,100 L 20,100 C 20,80 80,80 80,100 L 100,100 L 100,120 C 120,120 120,180 100,180 L 100,200 L 80,200 C 80,220 20,220 20,200 L 0,200 Z"/></clipPath>
+            <clipPath id="p4"><path d="M 100,100 L 120,100 C 120,80 180,80 180,100 L 200,100 L 200,120 C 220,120 220,180 200,180 L 200,200 L 180,200 C 180,220 120,220 120,200 L 100,200 L 100,180 C 80,180 80,120 100,120 Z"/></clipPath>
+            <clipPath id="p5"><path d="M 200,100 L 220,100 C 220,80 280,80 280,100 L 300,100 L 300,200 L 280,200 C 280,220 220,220 220,200 L 200,200 L 200,180 C 180,180 180,120 200,120 Z"/></clipPath>
+            <clipPath id="p6"><path d="M 0,200 L 20,200 C 20,180 80,180 80,200 L 100,200 L 100,220 C 120,220 120,280 100,280 L 100,300 L 0,300 Z"/></clipPath>
+            <clipPath id="p7"><path d="M 100,200 L 120,200 C 120,180 180,180 180,200 L 200,200 L 200,220 C 220,220 220,280 200,280 L 200,300 L 100,300 L 100,280 C 80,280 80,220 100,220 Z"/></clipPath>
+            <clipPath id="p8"><path d="M 200,200 L 220,200 C 220,180 280,180 280,200 L 300,200 L 300,300 L 200,300 L 200,280 C 180,280 180,220 200,220 Z"/></clipPath>
+          </defs>
+        </svg>
+
         <div class="puzzle-board" id="puzzleBoard"></div>
         <div class="puzzle-controls">
           <button class="btn" id="shuffleBtn">SHUFFLE PIECES 🧩</button>
@@ -910,7 +908,7 @@ couponGrid.querySelectorAll('.coupon').forEach(card=>{
 });
 
 /* =========================================================
-   JIGSAW PUZZLE (Hardcoded to pic.jpeg with Real Jigsaw Shapes)
+   JIGSAW PUZZLE (Perfect SVG clip-path)
    ========================================================= */
 const P_SIZE = 3;
 const P_TOTAL = P_SIZE * P_SIZE;
@@ -928,7 +926,9 @@ function renderPuzzle(){
   puzzlePieces.forEach((piece, slot)=>{
     const tile = document.createElement('div');
     tile.className = 'puzzle-tile';
-    tile.setAttribute('data-piece', piece); // Sets the jigsaw mask position!
+    
+    // Apply the perfect SVG shape!
+    tile.style.clipPath = `url(#p${piece})`;
     
     if(puzzleImg){
       const col = piece % P_SIZE;
